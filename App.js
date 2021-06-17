@@ -1,30 +1,25 @@
-import React, { Component } from 'react';
-import { View, Text, Button } from 'react-native';
-import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      callNo: '05448355136'
-    };
-    //burada uygulama açılır açılmaz buton olmaksızıb tetiklenebiliyor...
-    // RNImmediatePhoneCall.immediatePhoneCall(this.state.callNo);
-  }
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import HomeScreen from './src/screen/Home'
+import LoginScreen from './src/screen/Login';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import reducers from './src/redux/reducers/index';
+import reduxThunk from 'redux-thunk';
 
-    //bu fonksiyonu bilerek yazdım uygulama açıkken hemen tetikleniyor mu diye...
-    //şimdilik butonla tetikledim ama biz apiden gelen duruma göre tetiklicez
-  calling = () => {
-    //apiden gelen istekteki numara ile arama yapılacak -->callNo
-    RNImmediatePhoneCall.immediatePhoneCall(this.state.callNo);
-  }
+const Stack = createStackNavigator();
 
-  render() {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Button title="Arama yap" onPress={() => this.calling()} />
-      </View>
-    );
-  }
+export default function App() {
+  const store = createStore(reducers, {}, applyMiddleware(reduxThunk))
+  return (
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
+  );
 }
-
-export default App;
