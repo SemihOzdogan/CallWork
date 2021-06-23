@@ -4,15 +4,16 @@ import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 let token;
-calling = async (no) => {
+calling = (no) => {
     console.log(no)
     RNImmediatePhoneCall.immediatePhoneCall(no);
 }
+
 function Home() {
     const [callNo, setCallNo] = useState('05448355136')
     useEffect(async () => {
-        console.log('1')
         token = await AsyncStorage.getItem('@Token')
+        // calling(callNo)
         console.log(token)
     });
     return (

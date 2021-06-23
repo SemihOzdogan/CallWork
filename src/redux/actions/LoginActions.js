@@ -1,4 +1,5 @@
 import { USERNAME_CHANGE, PASSWORD_CHANGE } from './types';
+
 export const usernameChange = (username) => {
     return (dispatch) => {
         dispatch({
@@ -7,7 +8,6 @@ export const usernameChange = (username) => {
         });
     };
 };
-
 export const passwordChange = (password) => {
     return (dispatch) => {
         dispatch({

@@ -9,10 +9,9 @@ import { usernameChange, passwordChange } from '../redux/actions/index';
 import { connect } from 'react-redux';
 
 function Login(props) {
-
+    let URL = 'http://api8test.netvar.ga/login'
     /*States */
     const [loading, setLoading] = useState(false)
-
     /*Login Request API */
     LoginRequest = async (props, username, password) => {
         setLoading(true)
@@ -20,34 +19,48 @@ function Login(props) {
             username: username,
             password: password,
         }
-        await fetch('http:/apitest.enerjitakibi.com/login', {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(userInfo)
-        })
-            .then((response) => response.json())
-            .then((response => {
-                console.log(response)
-                if (response.IsSuccess == true) {
-                    AsyncStorage.setItem('@Token', response.Data.token.access_token)
-                    props.navigation.navigate('Home')
-                }
-                else {
-                    Toast.show({
-                        type: 'info',
-                        position: 'bottom',
-                        visibilityTime: 4000,
-                        autoHide: true,
-                        topOffset: 30,
-                        bottomOffset: 40,
-                        text1: 'Uyarı',
-                        text2: response.Message.Body
-                    });
-                }
-                setLoading(false)
-            }))
+
+        if (userInfo.username == '' || userInfo.password == '') {
+            Toast.show({
+                type: 'error',
+                position: 'bottom',
+                visibilityTime: 4000,
+                autoHide: true,
+                topOffset: 30,
+                bottomOffset: 40,
+                text1: 'Uyarı',
+                text2: 'Kullanıcı adı ve şifre alanı boş bırakılamaz'
+            });
+        }
+        else {
+            await fetch(URL, {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(userInfo)
+            })
+                .then((response) => response.json())
+                .then((response => {
+                    if (response.status == true) {
+                        AsyncStorage.setItem('@Token', response.data.token.access_token)
+                        props.navigation.navigate('Home')
+                    }
+                    else {
+                        Toast.show({
+                            type: 'info',
+                            position: 'bottom',
+                            visibilityTime: 4000,
+                            autoHide: true,
+                            topOffset: 30,
+                            bottomOffset: 40,
+                            text1: 'Uyarı',
+                            text2: response.message
+                        });
+                    }
+                    setLoading(false)
+                }))
+        }
     }
 
     /*Render */
@@ -77,7 +90,7 @@ const mapStateToProps = ({ loginReducersResponse }) => {
     const { username, password } = loginReducersResponse
     return {
         username,
-        password
+        password,
     }
 }
 export default connect(mapStateToProps, { usernameChange, passwordChange })(Login);
