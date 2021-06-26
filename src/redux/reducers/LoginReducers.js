@@ -3,7 +3,6 @@ import { USERNAME_CHANGE, PASSWORD_CHANGE } from '../actions/types';
 const INITIAL_STATE = {
     username: 'bayi@gruparge.com',
     password: 'Acer123ert.',
-    loading: false
 }
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {

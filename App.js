@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import reducers from './src/redux/reducers/index';
 import reduxThunk from 'redux-thunk';
-
+import Icon from 'react-native-vector-icons/FontAwesome5';
 const Stack = createStackNavigator();
 
 logOut = async (navigation) => {
@@ -30,7 +30,8 @@ export default function App() {
             title: 'Arama Ekranı', headerLeft: null,
             headerRight: () => (
               <TouchableOpacity onPress={() => logOut(navigation)}>
-                <Text style={{ fontSize: 16, padding: 5 }}>Çıkış Yap</Text>
+                {/* <Text style={{ fontSize: 16, padding: 5 }}>Çıkış Yap</Text> */}
+                <Icon name="power-off" size={25} color="red" style={{ padding: 10 }} />
               </TouchableOpacity>
             )
           })}

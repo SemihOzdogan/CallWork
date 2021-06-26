@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Image, Text, Button, TextInput } from 'react-native';
 import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { callNumberChange } from '../redux/actions/index';
+import { connect } from 'react-redux';
+import Input from '../components/Input';
 
 let token;
 calling = (no) => {
@@ -9,11 +12,11 @@ calling = (no) => {
     RNImmediatePhoneCall.immediatePhoneCall(no);
 }
 
-function Home() {
-    const [callNo, setCallNo] = useState('05448355136')
+function Home(props) {
+    // const [callNo, setCallNo] = useState('05448355136')
     useEffect(async () => {
         token = await AsyncStorage.getItem('@Token')
-        // calling(callNo)
+        calling(props.number)
         console.log(token)
     });
     return (
@@ -23,9 +26,21 @@ function Home() {
                 source={require('../image/call_me.gif')}
             />
             <Text>ARAMA YAPILIYOR...</Text>
-            <TextInput keyboardType="phone-pad" style={{ backgroundColor: '#ccc', borderRadius: 4, margin: 10 }} placeholder="Aramak istediğiniz numarayı giriniz" value={callNo} onChangeText={val => setCallNo(val)} />
-            <Button title="Arama yap" onPress={() => calling(callNo)} />
+            <Input
+                keyboardType="phone-pad"
+                placeholder="Aramak istediğiniz numarayı giriniz"
+                value={props.number}
+                onChangeText={number => props.passwordChange(number)}
+            />
+            <Button title="Arama yap" onPress={() => calling(props.number)} />
         </View>
     )
 }
-export default Home;
+const mapStateToProps = ({ callReducersResponse }) => {
+    const { number } = callReducersResponse
+    return {
+        number,
+    }
+}
+export default connect(mapStateToProps, { callNumberChange })(Home);
+

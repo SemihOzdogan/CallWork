@@ -19,7 +19,7 @@ function Login(props) {
             username: username,
             password: password,
         }
-
+        console.log(URL, userInfo)
         if (userInfo.username == '' || userInfo.password == '') {
             Toast.show({
                 type: 'error',
@@ -48,7 +48,7 @@ function Login(props) {
                     }
                     else {
                         Toast.show({
-                            type: 'info',
+                            type:'info',
                             position: 'bottom',
                             visibilityTime: 4000,
                             autoHide: true,
@@ -69,11 +69,13 @@ function Login(props) {
             <Toast ref={(ref) => Toast.setRef(ref)} />
             <Title />
             <Input
+                keyboardType="default"
                 placeholder="Username"
                 value={props.username}
                 onChangeText={username => props.usernameChange(username)}
             />
             <Input
+                keyboardType="default"
                 placeholder="Password"
                 value={props.password}
                 onChangeText={password => props.passwordChange(password)}
